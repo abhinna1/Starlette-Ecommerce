@@ -1,17 +1,30 @@
 from starlette.applications import Starlette
 from starlette.routing import Route
-from controllers.user_controller import register, login
+from controllers.user_controller import register, login, getUser
 from database import SessionLocal
-
-
+from middlewares.AuthBackend import AuthBackend
+from starlette.middleware.authentication import AuthenticationMiddleware
+from starlette.middleware import Middleware
 # Init application.
-app = Starlette()
 routes = [
     Route("/register", endpoint=register, methods=["POST"]),
-    Route("/login", endpoint=login, methods=["POST"])
+    Route("/login", endpoint=login, methods=["POST"]),
+    Route("/user", endpoint=getUser, methods=["GET"])
 ]
 
-app = Starlette(routes=routes)
+# Middlewares.
+auth_backend = AuthBackend()
+middlewares = [
+    Middleware(AuthenticationMiddleware, backend=AuthBackend())
+]
+
+app = Starlette(
+    routes=routes,
+    middleware=middlewares
+)
+
+
+# Application states.
 app.state.db = SessionLocal()
 
 # Run application.

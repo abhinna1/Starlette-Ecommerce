@@ -12,3 +12,6 @@ class SessionRepository:
         self.db.refresh(session)
         return session
     
+    def get_session_by_id(self, session_id:str):
+        return self.db.query(UserSession).filter(UserSession.id == session_id).first()
+    

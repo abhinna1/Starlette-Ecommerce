@@ -1,8 +1,8 @@
 from starlette.requests import Request
 from starlette.responses import JSONResponse
+from starlette.authentication import requires
 from services.user_services import UserServices
 from services.session_services import SessionServices
-
 
 
 async def register(request: Request):
@@ -43,3 +43,13 @@ async def login(request: Request):
         return JSONResponse(response_data)
     except Exception as e:
         return JSONResponse({'message': str(e)}, status_code=400)
+    
+@requires('authenticated')
+async def getUser(request:Request):
+    user = request.user
+    response_data = {
+        "id": user.id,
+        "email": user.email,
+        "username": user.username
+    }
+    return JSONResponse(response_data)
