@@ -46,7 +46,7 @@ def verify_password_strength(password):
 
 def hash_password(password:str) -> str:
     """
-    Hashes a password using the bcrypt algorithm.
+    Hashes a password using the SHA-256 algorithm.
     Returns the hashed password as a string.
     """
-    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode("utf-8")

@@ -20,4 +20,5 @@ class UserServices:
             raise Exception('Password is too weak')
         
         password = hash_password(password)
+
         return self.user_repository.create_user(username, email, password)

@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from models.User import User
-
+import bcrypt
 
 class UserRepository:
     def __init__(self, db: Session):
@@ -18,3 +18,10 @@ class UserRepository:
 
     def get_user_by_email(self, email: str):
         return self.db.query(User).filter(User.email == email).first()
+    
+    def compare_password_hash(self, email:str, password:str):
+        """
+            Compare if the hash of the input password is same as the stored password hash. 
+        """
+        user = self.get_user_by_email(email)
+        return bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8'))

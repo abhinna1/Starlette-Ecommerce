@@ -1,6 +1,9 @@
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 from services.user_services import UserServices
+from services.session_services import SessionServices
+
+
 
 async def register(request: Request):
     data = await request.json()
@@ -22,3 +25,21 @@ async def register(request: Request):
         'email': email
     }
     return JSONResponse(response_data)
+
+async def login(request: Request):
+    data = await request.json()
+    email = data.get('email')
+    password = data.get('password')
+    try:
+        session_service = SessionServices(request.app.state.db)
+        session = session_service.create_session(email, password)
+        response_data={
+            "id": str(session.id),
+            "user": session.user_id,
+            "created_at": str(session.created_at),
+            "expires_at": str(session.expires_at),
+            "is_expired": session.is_expired
+        }
+        return JSONResponse(response_data)
+    except Exception as e:
+        return JSONResponse({'message': str(e)}, status_code=400)
