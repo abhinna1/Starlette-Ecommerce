@@ -1,15 +1,16 @@
 from starlette.applications import Starlette
-from starlette.routing import Route
+from starlette.routing import Route, Mount
 from controllers.user_controller import register, login, getUser
 from database import SessionLocal
 from middlewares.AuthBackend import AuthBackend
 from starlette.middleware.authentication import AuthenticationMiddleware
 from starlette.middleware import Middleware
+# from admin.admin import admin as app_admin
 # Init application.
 routes = [
     Route("/register", endpoint=register, methods=["POST"]),
     Route("/login", endpoint=login, methods=["POST"]),
-    Route("/user", endpoint=getUser, methods=["GET"])
+    Route("/user", endpoint=getUser, methods=["GET"]),
 ]
 
 # Middlewares.
@@ -22,6 +23,8 @@ app = Starlette(
     routes=routes,
     middleware=middlewares
 )
+
+# app_admin.mount_to(app)
 
 
 # Application states.

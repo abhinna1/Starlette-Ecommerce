@@ -22,3 +22,10 @@ class UserServices:
         password = hash_password(password)
 
         return self.user_repository.create_user(username, email, password)
+
+    def get_user_by_username(self, username: str)-> User:
+        return self.user_repository.get_user_by_username(username)
+    
+    def get_user_by_email(self, email: str)-> User:
+        return self.user_repository.get_user_by_email(email)
+    

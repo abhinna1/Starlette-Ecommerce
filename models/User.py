@@ -1,6 +1,6 @@
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, String, Integer, Enum
 from database import Base
-
+from commons.ENUMS import UserEnum
 
 class User(Base):
     __tablename__ = 'users'
@@ -8,3 +8,4 @@ class User(Base):
     username = Column(String, unique=True)
     email = Column(String, unique=True)
     password = Column(String)
+    role = Column(Enum(UserEnum), default=UserEnum.USER)
