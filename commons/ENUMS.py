@@ -1,5 +1,5 @@
 import enum
 
 class UserEnum(enum.Enum):
-    USER = 'user'
-    ADMIN = 'admin'
+    USER = 'USER'
+    ADMIN = 'ADMIN'

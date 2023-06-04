@@ -44,7 +44,7 @@ async def login(request: Request, email=None, password=None):
         session = session_service.create_session(email, password)
         response_data={
             "id": str(session.id),
-            "user": session.user_id,
+            "user": str(session.user_id),
             "created_at": str(session.created_at),
             "expires_at": str(session.expires_at),
             "is_expired": session.is_expired

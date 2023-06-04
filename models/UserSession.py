@@ -11,12 +11,12 @@ dotenv.load_dotenv()
 session_life = int(os.getenv("SESSION_LIFE"))
 class UserSession(Base):
     __tablename__ = 'sessions'
-    id = Column(UUID, primary_key=True, index=True, default=str(uuid.uuid4()))
-    user_id = Column(Integer, ForeignKey('users.id'))
+    id = Column(UUID(as_uuid=True), primary_key=True, index=True, unique=True, default=uuid.uuid4)
+    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'))
     user = relationship("User")
-    created_at = Column(DateTime, default=datetime.utcnow)
-    expires_at = Column(DateTime, default=datetime.utcnow() + timedelta(days=session_life))
-    is_expired = Column(Boolean, default=False)
+    created_at = Column(DateTime(), default=datetime.utcnow)
+    expires_at = Column(DateTime(), default=datetime.utcnow() + timedelta(days=session_life))
+    is_expired = Column(Boolean(), default=False)
 
     def is_active(self):
         """

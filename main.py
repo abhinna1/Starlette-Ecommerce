@@ -5,7 +5,7 @@ from database import SessionLocal
 from middlewares.AuthBackend import AuthBackend
 from starlette.middleware.authentication import AuthenticationMiddleware
 from starlette.middleware import Middleware
-# from admin.admin import admin as app_admin
+from admin.admin import admin as app_admin
 # Init application.
 routes = [
     Route("/register", endpoint=register, methods=["POST"]),
@@ -24,7 +24,7 @@ app = Starlette(
     middleware=middlewares
 )
 
-# app_admin.mount_to(app)
+app_admin.mount_to(app)
 
 
 # Application states.

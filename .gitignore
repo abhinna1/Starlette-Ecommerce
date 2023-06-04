@@ -3,3 +3,4 @@ venv
 __pycache__
 registration_log.csv
 admin
+alembic.ini
