@@ -21,7 +21,7 @@ def upgrade() -> None:
     op.create_table(
         'products',
         sa.Column('id', sa.UUID(as_uuid=True), primary_key=True, index=True, default=str(uuid.uuid4)),
-        sa.Column('name', sa.String(length=150), unique=True),
+        sa.Column('name', sa.String(length=150)),
         sa.Column('description', sa.String(length=500)),
         sa.Column('price', sa.Integer()),
         sa.Column('quantity', sa.Integer(), default=0),
