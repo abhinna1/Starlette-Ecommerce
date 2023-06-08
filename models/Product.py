@@ -4,6 +4,7 @@ from database import Base
 from datetime import datetime
 from sqlalchemy.dialects.postgresql import JSONB
 import uuid
+from sqlalchemy.orm import relationship
 
 class Product(Base):
     __tablename__ = 'products'
