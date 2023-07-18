@@ -7,7 +7,8 @@ class ProductRepository:
         self.db = db
 
     def get_all_products(self):
-        self.db.query(Product).all()
+        products = self.db.query(Product).all()
+        return products
     
     def get_product_by_id(self, product_id:str):
         return self.db.query(Product).filter(Product.id == product_id).first()

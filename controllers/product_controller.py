@@ -4,19 +4,47 @@ from starlette.authentication import requires
 from services.product_services import ProductServices
 from abstracts.ProductAbstract import DatabaseProductAbstract
 from starlette.authentication import requires
+import json
 
 async def get_all_products(request: Request):
-    db = request.app.state.db
-    product_service = ProductServices(db)
-    products = product_service.get_all_products()
-    return JSONResponse(products)
+    try:
+        db = request.app.state.db
+        product_service = ProductServices(db)
+        products = product_service.get_all_products()
+        products = [
+            {
+                "id": str(product.id),
+                "name" : product.name,
+                "description": product.description,
+                "price": product.price,
+                "quantity": product.quantity,
+                "image": product.image,
+            }
+            for product in products
+        ]
+        return JSONResponse({"data": products})
+    except Exception as e:
+        return JSONResponse({'message': str(e)}, status_code=400)
 
 async def get_product_by_id(request: Request):
-    db = request.app.state.db
-    product_service = ProductServices(db)
-    product_id = request.path_params.get('product_id')
-    product = product_service.get_product_by_id(product_id)
-    return JSONResponse(product)
+    try:
+        db = request.app.state.db
+        product_service = ProductServices(db)
+        product_id = request.path_params.get('product_id')
+        product = product_service.get_product_by_id(product_id)
+        product = DatabaseProductAbstract(
+            id=product.id,
+            name=product.name,
+            description=product.description,
+            price=product.price,
+            quantity=product.quantity,
+            image=product.image,
+        )
+        product = product.dict()
+        product['id'] = str(product['id'])        
+        return JSONResponse(product)
+    except Exception as e:
+        return JSONResponse({'message': str(e)}, status_code=400)
 
 @requires(scopes=['authenticated', 'admin'])
 async def create_product(request: Request):
