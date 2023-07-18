@@ -15,7 +15,7 @@ class CartRepository:
         self.product_services = ProductServices(db=db)
 
 
-    def get_or_create_cart(self, user_id:UUID):
+    def get_or_create_cart(self, user_id:UUID, product_id=None):
         cart = self.db.query(Cart).filter(
             Cart.user_id == user_id,
             Cart.status == CartStatusEnum.ACTIVE
@@ -24,7 +24,6 @@ class CartRepository:
         if not cart:
             validated_cart = CartAbstract(
                 user_id = user_id,
-                product_id = None,
                 status = CartStatusEnum.ACTIVE,
                 ordered_at = datetime.now()         
             )
@@ -98,13 +97,11 @@ class CartRepository:
             self.db.refresh(cart_item)
             return cart_item
 
-
         return self.update_cart_item(
             cart_id = cart.id,
             product_id = cart_item.product_id,
             quantity=cart_item.quantity
         )
-        
 
 
     def add_products_to_cart(self, validated_cart_items:list):

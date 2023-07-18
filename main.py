@@ -15,7 +15,7 @@ routes = [
     Route("/login", endpoint=login, methods=["POST"]),
     Route("/user", endpoint=getUser, methods=["GET"]),
     Mount("/product", routes=ProductRoutes.routes),
-    Route("/cart", endpoint=add_product_to_cart, methods=["GET"])
+    Route("/cart", endpoint=add_product_to_cart, methods=["POST"])
 ]
 
 # Middlewares.

@@ -5,7 +5,7 @@ from datetime import datetime
 
 class CartAbstract(BaseModel):
     user_id: UUID
-    status: str = CartStatusEnum.ACTIVE
+    status: CartStatusEnum = CartStatusEnum.ACTIVE
     ordered_at: datetime = datetime.now()
 
 class DbCartItemAbstract(BaseModel):
