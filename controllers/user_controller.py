@@ -8,6 +8,7 @@ from helpers.log_helpers import (
     log_success_user_registration,
     log_failed_user_registration,
 )
+from starlette import status
 
 async def register(request: Request):
     data = await request.json()
@@ -28,11 +29,11 @@ async def register(request: Request):
     
     # Example response
     response_data = {
-        'message': 'User created successfully',
+        'messag e': 'User created successfully',
         'username': username,
         'email': email
     }
-    return JSONResponse(response_data)
+    return JSONResponse(response_data, status_code=status.HTTP_201_CREATED)
 
 async def login(request: Request, email=None, password=None):
     if not email and not password:
@@ -57,7 +58,7 @@ async def login(request: Request, email=None, password=None):
 async def getUser(request:Request):
     user = request.user
     response_data = {
-        "id": user.id,
+        "id": str(user.id),
         "email": user.email,
         "username": user.username
     }

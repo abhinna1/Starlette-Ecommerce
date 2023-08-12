@@ -15,8 +15,14 @@ class CartServices:
             user_id=user_id,
             product_id=product_id
         )
+        
+    def get_cart_items(self, cart_id:UUID):
+        return self.cart_repository.get_cart_items(
+            cart_id=cart_id
+        )
+        
     
-    def add_product_to_cart(self, cart_id:UUID, product_id:UUID, quantity:int=1, user_id:UUID=None):
+    def add_product_to_cart(self, cart_id:UUID, product_id:UUID, quantity:int=1, user_id:UUID=None, cryptographer=None):
         
         product = self.product_repository.get_product_by_id(
             product_id=product_id
@@ -31,7 +37,9 @@ class CartServices:
             product_id=product_id,
             quantity=quantity
         )
+        
 
         return self.cart_repository.add_product_to_cart(
-            validated_cart_item
+            validated_cart_item = validated_cart_item,
+            cryptographer = cryptographer
         )

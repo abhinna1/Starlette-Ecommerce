@@ -17,7 +17,7 @@ class DbCartItemAbstract(BaseModel):
 class CartItemAbstract(BaseModel):
     cart_id: UUID
     product_id: UUID
-    quantity: int = 1
+    quantity: str
 
 class DbCartItemsAbstract(BaseModel):
     id: UUID

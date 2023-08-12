@@ -4,8 +4,8 @@ class ProductAbstract(BaseModel):
     name:str
     description:str
     price:int
-    quantity:int
-    image:list = []
+    quantity:int=200
+    # image:list = []
 
 class DatabaseProductAbstract(BaseModel):
     id:uuid.UUID
@@ -13,4 +13,4 @@ class DatabaseProductAbstract(BaseModel):
     description:str
     price:int
     quantity:int
-    image:list = []
+    # image:list = []

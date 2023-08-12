@@ -22,4 +22,5 @@ class AuthBackend(AuthenticationBackend):
                 return AuthCredentials(["authenticated"]), session.user
             return None
         except Exception as e:
+            request.app.state.db.rollback()
             return None

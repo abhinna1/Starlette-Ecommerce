@@ -13,4 +13,4 @@ class Product(Base):
     description = Column(String(length=500), nullable=False)
     price = Column(Integer(), nullable=False)
     quantity = Column(Integer(), default=0, nullable=False)
-    image = Column(JSONB(), nullable=True, default=[])
+    # image = Column(String(), nullable=True, default=[])

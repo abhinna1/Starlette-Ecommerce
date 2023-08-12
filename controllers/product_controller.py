@@ -4,6 +4,9 @@ from starlette.authentication import requires
 from services.product_services import ProductServices
 from abstracts.ProductAbstract import DatabaseProductAbstract
 from starlette.authentication import requires
+from models.Review import Review
+from models.User import User
+
 import json
 
 async def get_all_products(request: Request):
@@ -18,7 +21,7 @@ async def get_all_products(request: Request):
                 "description": product.description,
                 "price": product.price,
                 "quantity": product.quantity,
-                "image": product.image,
+                # "image": product.image,
             }
             for product in products
         ]
@@ -38,7 +41,7 @@ async def get_product_by_id(request: Request):
             description=product.description,
             price=product.price,
             quantity=product.quantity,
-            image=product.image,
+            # image=product.image,
         )
         product = product.dict()
         product['id'] = str(product['id'])        
@@ -59,7 +62,7 @@ async def create_product(request: Request):
             price=product.price,
             description=product.description,
             quantity= product.quantity,
-            image=product.image,
+            # image=product.image,
         )
         product = product.dict()
         product['id'] = str(product['id'])
@@ -68,3 +71,44 @@ async def create_product(request: Request):
         )
     except Exception as e:
         return JSONResponse({'message': str(e)}, status_code=400)
+    
+@requires('authenticated')
+async def add_review(request):
+    try:
+        data = await request.json()
+        description = data['description']
+        product_id = request.path_params.get('product_id')
+        user_id = request.user.id
+        
+
+
+        review = Review(
+            description=description,
+            product_id=product_id,
+            user_id=user_id
+        )
+        request.app.state.db.add(review)
+        request.app.state.db.commit()
+
+        return JSONResponse({'message': 'Review added successfully'}, status_code=201)
+    except Exception as e:
+        request.app.state.db.rollback()
+        return JSONResponse({'message': str(e)}, status_code=500)
+    
+async def get_product_reviews(request):
+    try:
+        product_id = request.path_params.get('product_id')
+        
+        reviews = request.app.state.db.query(Review).filter(Review.product_id == product_id).all()
+        reviews = [{
+            "id": str(review.id),
+            "description": review.description,
+            "added_by_username": str((request.app.state.db.query(User).filter(User.id ==review.user_id).first()).username),
+            "added_by_email": str((request.app.state.db.query(User).filter(User.id ==review.user_id).first()).email),
+            } for review in reviews
+        ]
+        
+        return JSONResponse({'message': 'Review added successfully', 'data': reviews}, status_code=200)
+    except Exception as e:
+        request.app.state.db.rollback()
+        return JSONResponse({'message': str(e)}, status_code=500)
