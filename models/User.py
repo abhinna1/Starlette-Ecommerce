@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Enum, UUID
+from sqlalchemy import Column, String, Enum, UUID, Integer
 from database import Base
 from commons.ENUMS import UserEnum
 import uuid
@@ -11,4 +11,7 @@ class User(Base):
     email = Column(String(), unique=True)
     password = Column(String())
     role = Column(Enum(UserEnum), default=UserEnum.USER)
-    # cart = relationship("Cart")
+    failed_login = Column(Integer(), default=0)
+    
+    
+    

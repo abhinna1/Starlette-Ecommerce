@@ -8,6 +8,7 @@ from helpers.log_helpers import (
     log_success_user_registration,
     log_failed_user_registration,
 )
+from commons.ENUMS import UserEnum
 from starlette import status
 
 async def register(request: Request):
@@ -52,6 +53,7 @@ async def login(request: Request, email=None, password=None):
         }
         return JSONResponse(response_data)
     except Exception as e:
+        
         return JSONResponse({'message': str(e)}, status_code=400)
     
 @requires('authenticated')
@@ -63,3 +65,22 @@ async def getUser(request:Request):
         "username": user.username
     }
     return JSONResponse(response_data)
+
+@requires('authenticated')
+async def logout(request: Request):
+    user = request.user
+    data = await request.json()
+    try:
+        session_service = SessionServices(request.app.state.db)
+        session = session_service.get_session_by_id(data['session_id'])
+        session.is_expired = True
+        request.app.state.db.commit()
+        return JSONResponse({'message': 'Logout successful'}, status_code=200)
+    except Exception as e:
+        return JSONResponse({'message': str(e)}, status_code=400)
+    
+@requires(scopes=['authenticated', 'admin'])
+async def isAdmin(request: Request):
+    if request.user.role == UserEnum.ADMIN:
+        return JSONResponse({'message': 'Admin only page.'}, status_code=status.HTTP_200_OK)
+    return JSONResponse({'message': 'Unauthorized.'}, status_code=status.HTTP_401_UNAUTHORIZED)

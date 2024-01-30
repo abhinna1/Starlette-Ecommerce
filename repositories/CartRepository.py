@@ -102,7 +102,6 @@ class CartRepository:
             cart_id=cart.id,
             product_id=cart_item.product_id
         ):
-            # cart_item.product_id = cryptographer.encrypt(str(validated_cart_item.product_id).encode('utf-8'))
             self.db.add(cart_item)
             self.db.commit()
             self.db.refresh(cart_item)

@@ -17,8 +17,12 @@ class AuthBackend(AuthenticationBackend):
             if session:
                 if not session.is_active():
                     return None
+                if session.user.failed_login > 5:
+                    return None
                 if session.user.role == UserEnum.ADMIN:
+                    session.user.failed_login = 0
                     return AuthCredentials(["authenticated", "admin"]), session.user
+                session.user.failed_login = 0
                 return AuthCredentials(["authenticated"]), session.user
             return None
         except Exception as e:

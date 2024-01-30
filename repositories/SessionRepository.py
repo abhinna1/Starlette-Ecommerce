@@ -15,3 +15,7 @@ class SessionRepository:
     def get_session_by_id(self, session_id:str):
         return self.db.query(UserSession).filter(UserSession.id == session_id).first()
     
+    # def delete_session(self, session:UserSession):
+    #     self.get_session_by_id(session.id)
+    #     self.db.commit()
+    
